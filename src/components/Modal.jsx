@@ -1,10 +1,12 @@
 import { useState } from "react";
+import Message from "../components/Message";
 import Close from "../img/cerrar.svg";
 
-const Modal = ({ modal, setModal, animateModal, setAnimateModal }) => {
+const Modal = ({ modal, setModal, animateModal, setAnimateModal, saveExpense }) => {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState("");
   const [category, setCategory] = useState("");
+  const [message, setMessage] = useState("");
 
   const hideModal = () => {
     setAnimateModal(false);
@@ -12,13 +14,30 @@ const Modal = ({ modal, setModal, animateModal, setAnimateModal }) => {
       setModal(false);
     }, 500);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if ([name, quantity, category].includes("")) {
+      setMessage("All fields must be filled");
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+      return;
+    }
+    saveExpense({name, quantity, category})
+  };
+
   return (
     <div className="modal">
       <div className="cerrar-modal">
         <img src={Close} onClick={hideModal} />
       </div>
-      <form className={`formulario ${animateModal ? "animar" : "cerrar"}`}>
+      <form
+        onSubmit={handleSubmit}
+        className={`formulario ${animateModal ? "animar" : "cerrar"}`}
+      >
         <legend>New Expense</legend>
+        {message && <Message type="error">{message}</Message>}
         <div className="campo">
           <label htmlFor="name">Expense Name</label>
           <input
@@ -48,11 +67,12 @@ const Modal = ({ modal, setModal, animateModal, setAnimateModal }) => {
           >
             <option value=""> --Select--</option>
             <option value="Savings"> Savings </option>
-            <option value="Investment"> Investment </option>
+            <option value="Subscriptions"> Subscriptions </option>
             <option value="Food"> Food </option>
             <option value="House"> House Expenses </option>
             <option value="Health"> Health</option>
             <option value="Entertainment"> Entertainment </option>
+            <option value="Other"> Other </option>
           </select>
         </div>
         <input type="submit" value="Add Expense" />
