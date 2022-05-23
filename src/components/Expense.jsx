@@ -1,4 +1,12 @@
 import React from "react";
+import {
+  LeadingActions,
+  SwipeableList,
+  SwipeableListItem,
+  SwipeAction,
+  TrailingActions,
+} from "react-swipeable-list";
+import "react-swipeable-list/dist/styles.css";
 import { formatDate } from "../helpers";
 import iconSavings from "../img/icono_ahorro.svg";
 import iconFood from "../img/icono_comida.svg";
@@ -17,27 +25,55 @@ const iconLibrary = {
   Subscriptions: iconSubscriptions,
   Other: iconOther,
 };
-const Expense = ({ expense }) => {
+const Expense = ({ expense, setEditExpense, deleteExpense }) => {
   const category = expense.category;
   const name = expense.name;
   const quantity = expense.quantity;
   const id = expense.id;
   const date = expense.date;
+
+  const leadingActions = () => (
+    <LeadingActions>
+      <SwipeAction onClick={()=> setEditExpense(expense)}>
+        Edit
+      </SwipeAction>
+    </LeadingActions>
+  )
+
+  const trailingActions = () =>  (
+    <TrailingActions>
+    <SwipeAction onClick={()=> deleteExpense(id)}
+     destructive={true}>
+      Delete
+    </SwipeAction>
+  </TrailingActions>
+  )
+
+
   return (
-    <div className="gasto sombra ">
-      <div className="contenido-gasto">
-        <img src={iconLibrary[category]} alt = "icon logo" />
-        <div className="descripcion-gasto">
-          <p className="categoria">{category}</p>
-          <p className="nombre-gasto">{name}</p>
-          <p className="fecha-gasto">
-            Added: {""}
-            <span>{formatDate(date)}</span>
-          </p>
+    <SwipeableList>
+      <SwipeableListItem
+      leadingActions={leadingActions()}
+      trailingActions={trailingActions()
+     
+      }
+      > 
+      <div className="gasto sombra ">
+        <div className="contenido-gasto">
+          <img src={iconLibrary[category]} alt="icon logo" />
+          <div className="descripcion-gasto">
+            <p className="categoria">{category}</p>
+            <p className="nombre-gasto">{name}</p>
+            <p className="fecha-gasto">
+              Added: {""}
+              <span>{formatDate(date)}</span>
+            </p>
+          </div>
         </div>
+        <p className="cantidad-gasto">{quantity}EUR</p>
       </div>
-      <p className="cantidad-gasto">{quantity}EUR</p>
-    </div>
+      </SwipeableListItem>
+    </SwipeableList>
   );
 };
 
