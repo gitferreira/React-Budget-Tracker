@@ -41,7 +41,7 @@ function App() {
   useEffect(() => {
     localStorage.setItem("budget", budget ?? 0);
   }, [budget]);
-
+//
   useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses) ?? 0);
   }, [expenses]);
@@ -53,6 +53,7 @@ function App() {
       );
       setFilteredExpenses(filteredExpenses);
     }
+
     {
 
     }
